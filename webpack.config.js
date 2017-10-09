@@ -105,7 +105,8 @@ module.exports = env => {
       }),
     ],
     externals: {
-      jquery: 'jQuery'
+      jquery: 'jQuery',
+      moment: 'moment'
     },
     cache: isDebug,
     stats: {

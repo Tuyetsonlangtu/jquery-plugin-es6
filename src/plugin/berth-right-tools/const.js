@@ -32,3 +32,10 @@ export const LIST_BUTTON = {
   btnWindow: 'btn-window-plugin',
   btnList: 'btn-list-plugin',
 }
+
+export const VESSEL_DIR = {
+  leftRight: '0123S', //Starboard
+  rightLeft: '0123P' // Portside
+}
+
+export const GRID_HEIGHT = 5;
