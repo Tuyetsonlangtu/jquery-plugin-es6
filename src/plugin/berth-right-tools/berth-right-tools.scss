@@ -1,0 +1,161 @@
+.btn-default{
+  height: 30px;
+  padding: 6px 10px 5px;
+  border-style: inherit;
+  text-align: center;
+  outline: none;
+  background: #336699;
+  border: 1px solid #ddd;
+  color: white;
+  cursor: pointer;
+
+  &.active {
+    background: white;
+    color: black;
+  }
+}
+
+.berthRightTools{
+  width: 400px;
+  height: 600px;
+  right: 0;
+  position: absolute;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-wrap:no-wrap;
+
+  .left-button{
+    height: 100%;
+    float: left;
+    position: relative;
+    flex-basis:30px;
+    flex-shrink:0;
+
+    button {
+      transform: rotate(-90deg);
+      height: 30px;
+      width: 100px;
+      margin-left: -35px;
+
+      position: absolute;
+      padding: 6px 10px 5px;
+      border-style: inherit;
+      text-align: center;
+      line-height: 12px;
+      background-color: #336699;
+      color: #FFFFFF !important;
+      top: 20%;
+      -webkit-appearance: button;
+      cursor: pointer;
+
+      font-family: inherit;
+      font-style: inherit;
+      font-variant-ligatures: inherit;
+      font-variant-caps: inherit;
+      font-variant-numeric: inherit;
+      font-weight: inherit;
+      font-stretch: inherit;
+      font-size: inherit;
+      line-height: inherit;
+
+
+      &:hover{
+        background: #4181C1;
+      }
+    }
+  }
+
+  .right-content{
+    flex:1;
+
+    .wrapper{
+      height: 100%;
+      width: calc(100%);
+      float: left;
+      background-color: #e4e4e4;
+      overflow-y: auto;
+      overflow-x: hidden;
+      border: 1px solid #ccc;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      flex-wrap:no-wrap;
+
+      .tittle{
+        flex-basis:35px;
+        flex-shrink:0;
+        background: #777474;
+        text-align: left;
+
+        span{
+          margin: 6px 10px;
+          display: inline-block;
+          color: white;
+        }
+      }
+
+      .content{
+        flex:1;
+        float: left;
+        display: flex;
+        flex-direction: column;
+        flex-wrap:no-wrap;
+
+        .list-button{
+          width: 100%;
+          flex-basis:40px;
+          flex-shrink:0;
+          text-align: center;
+
+          button{
+            width: 49%;
+            margin-top: 8px;
+            position: relative;
+          }
+        }
+
+        .list-vessel{
+          margin-top: 5px;
+          flex:1;
+          overflow-y: scroll;
+          overflow-x: hidden;
+          position: relative;
+
+          &::-webkit-scrollbar-track
+          {
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            background-color: #dcdbdb;
+          }
+
+          &::-webkit-scrollbar
+          {
+            width: 10px;
+            background-color: #dcdbdb;
+          }
+
+          &::-webkit-scrollbar-thumb
+          {
+            border-radius: 10px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #a7a6a6;
+          }
+
+          .vessel-box{
+            background: red;
+            margin-left: 5px;
+            margin-right: 5px;
+            border: 2px solid black;
+            position: absolute;
+            left: 0;
+            right: 0;
+          }
+        }
+      }
+    }
+  }
+}
