@@ -44,31 +44,35 @@ module.exports = env => {
             presets: ['env']
           }
         },
-        {
-          test: reScript,
-          loader: 'babel-loader',
-          query: {
-            presets: ['env']
-          }
-        },
         {test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'file-loader?mimetype=image/svg+xml'},
         {test: /\.woff(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?mimetype=application/font-woff"},
         {test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?mimetype=application/font-woff"},
         {test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader?mimetype=application/octet-stream"},
         {test: /\.eot(\?v=\d+\.\d+\.\d+)?$/, loader: "file-loader"},
       ],
-      rules: [{
-        test: reStyle,
-        use: extractSass.extract({
-          use: [{
-            loader: "css-loader"
-          }, {
-            loader: "sass-loader"
-          }],
-          // use style-loader in development
-          fallback: "style-loader"
-        })
-      }]
+      rules: [
+        {
+          test: reScript,
+          exclude: /node_modules/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              presets: ['env']
+            }
+          }
+        },
+        {
+          test: reStyle,
+          use: extractSass.extract({
+            use: [{
+              loader: "css-loader"
+            }, {
+              loader: "sass-loader"
+            }],
+            // use style-loader in development
+            fallback: "style-loader"
+          })
+        }]
     },
     plugins: [
       new CleanWebpackPlugin(['build'], {
