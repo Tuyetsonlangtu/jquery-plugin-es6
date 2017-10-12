@@ -1,7 +1,7 @@
 import './berth-right-tools.scss';
 import $ from 'jquery';
 import moment from 'moment';
-import plugin from '../../common/plugin';
+import jqueryPlugin from '../../common/jquery-plugin';
 import {
   PLUGIN_NAME,
   OPTIONS_DEFAULT,
@@ -10,8 +10,6 @@ import {
   VESSEL_DIR,
   GRID_HEIGHT
 } from './const';
-
-
 console.log("plugin name: ", PLUGIN_NAME);
 
 class Plugin {
@@ -29,9 +27,11 @@ class Plugin {
       listVessel: '<div class="list-vessel"></div>',
       listTable: '<div class="list-table"></div>',
     }
-
     this.init(options);
     this.$RightTool = $(`.${PLUGIN_NAME}`);
+
+    this.open = this.openRightTool;
+    this.close = this.closeRightTool;
   }
 
   init(options) {
@@ -44,7 +44,7 @@ class Plugin {
       delete options.data;
     }
 
-    this.options = $.extend({}, OPTIONS_DEFAULT.settings, options);
+    this.options = $.extend({}, OPTIONS_DEFAULT, options);
     this.destroy();
     this.subscribeEvents();
     this.render();
@@ -60,14 +60,19 @@ class Plugin {
 
   unsubscribeEvents(){
     this.$element.off('click');
-    this.$element.off('nodeChecked');
+    this.$element.off('vslSelected');
+    this.$element.off('vslDblClick');
   }
 
   subscribeEvents() {
     this.unsubscribeEvents();
     this.$element.on('click', $.proxy(this.clickHandler, this));
-    if (typeof (this.options.onNodeChecked) === 'function') {
-      this.$element.on('nodeChecked', this.options.onNodeChecked);
+    this.$element.on('dblclick', $.proxy(this.dblClickHandler, this));
+    if (typeof (this.options.onVslSelected) === 'function') {
+      this.$element.on('vslSelected', this.options.onVslSelected);
+    }
+    if (typeof (this.options.onVslDblClick) === 'function') {
+      this.$element.on('vslDblClick', this.options.onVslDblClick);
     }
   }
 
@@ -185,8 +190,8 @@ class Plugin {
       for(let i=0; i<vslData.length; i++){
         let dirClass = VESSEL_DIR.leftRight == vslData[i].along_side ? 'right' : 'left';
         let {top, height} = this.getVesselPosFromDate(previousDate, vslData[i].eta_date, vslData[i].etb_date, vslData[i].etd_date);
-        console.log("top: ", top)
-        console.log("height: ", height)
+        // console.log("top: ", top)
+        // console.log("height: ", height)
 
         let vslHtml = `<div class="vessel-box" vsl-id="${vslData[i].id}">
             <div class="icon-head ${dirClass}"><i class="fa fa-play" aria-hidden="true"></i></div>
@@ -248,14 +253,18 @@ class Plugin {
   clickHandler() {
     let target = $(event.target);
     let targetId = target.attr('id') ? target.attr('id') : "";
+
+    let {isVslSelected} = this.options;
     let targetClass = target.attr('class') ? target.attr('class') : "";
     $('.vessel-box').removeClass('selected');
-    if (targetClass == 'vessel-box') {
+    if(isVslSelected && targetClass == 'vessel-box') {
       target.addClass('selected');
       let vslId = target.attr('vsl-id');
-      console.log("vslId: ", vslId);
+      let rs = this.getVslDataById(vslId);
+      this.$element.trigger('vslSelected', $.extend(true, {}, rs));
       return;
     }
+
     switch (targetId) {
       case LIST_BUTTON.btnRighTool:
         if (this.isOpen) {
@@ -281,17 +290,39 @@ class Plugin {
     }
   }
 
+  dblClickHandler() {
+    let target = $(event.target);
+    let {isVslDblClick} = this.options;
+    let targetClass = target.attr('class') ? target.attr('class') : "";
+    if (isVslDblClick && targetClass == 'vessel-box') {
+      let vslId = target.attr('vsl-id');
+      let rs = this.getVslDataById(vslId);
+      this.$element.trigger('vslDblClick', $.extend(true, {}, rs));
+    }
+  }
+
   closeRightTool() {
     let {width} = this.options;
     this.$RightTool.animate({'margin-right': (-width + RIGHT_BUTTON.width)});
   }
 
-  /**
-   * Open right objects tool
-   */
   openRightTool() {
     this.$RightTool.animate({'margin-right': 0});
   }
+
+  getVslDataById(id) {
+    let {vslData} = this.pluginData;
+    let rs = null;
+    if (vslData) {
+      for (let i = 0; i < vslData.length; i++) {
+        if (vslData[i].id == id) {
+          rs = vslData[i];
+          break;
+        }
+      }
+    }
+    return rs;
+  }
 }
 
-plugin(PLUGIN_NAME, Plugin);
+jqueryPlugin(PLUGIN_NAME, Plugin);

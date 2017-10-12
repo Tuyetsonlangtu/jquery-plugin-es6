@@ -1,3 +1,4 @@
+var rightTools = null;
 $(function(){
   var strDate = '2016-10-22', number = 9;
   var berthData = {
@@ -15,7 +16,7 @@ $(function(){
       "direction": "0042RL"
     }], "berth_total_width": 365
   }
-  var bitts =  [{"id":0,"idx":0,"name":"01","start_position":0,"end_position":0,"start_position_original":0,"end_position_original":null,"berth_idx":"0"},{"id":1,"idx":1,"name":"02","start_position":0,"end_position":0,"start_position_original":26.2,"end_position_original":null,"berth_idx":"0"},{"id":2,"idx":2,"name":"03","start_position":0,"end_position":0,"start_position_original":52.2,"end_position_original":null,"berth_idx":"0"},{"id":3,"idx":3,"name":"04","start_position":0,"end_position":0,"start_position_original":78.3,"end_position_original":null,"berth_idx":"0"},{"id":4,"idx":4,"name":"05","start_position":0,"end_position":0,"start_position_original":104.4,"end_position_original":null,"berth_idx":"0"},{"id":5,"idx":5,"name":"06","start_position":0,"end_position":0,"start_position_original":130.5,"end_position_original":null,"berth_idx":"0"},{"id":6,"idx":6,"name":"07","start_position":0,"end_position":0,"start_position_original":156.5,"end_position_original":null,"berth_idx":"0"},{"id":7,"idx":7,"name":"08","start_position":0,"end_position":0,"start_position_original":182.6,"end_position_original":null,"berth_idx":"0"},{"id":8,"idx":8,"name":"09","start_position":0,"end_position":0,"start_position_original":208.7,"end_position_original":null,"berth_idx":"0"},{"id":9,"idx":9,"name":"10","start_position":0,"end_position":0,"start_position_original":234.7,"end_position_original":null,"berth_idx":"0"},{"id":10,"idx":10,"name":"11","start_position":0,"end_position":0,"start_position_original":260.8,"end_position_original":null,"berth_idx":"0"},{"id":11,"idx":11,"name":"12","start_position":0,"end_position":0,"start_position_original":286.89,"end_position_original":null,"berth_idx":"0"},{"id":12,"idx":12,"name":"13","start_position":0,"end_position":0,"start_position_original":313,"end_position_original":null,"berth_idx":"0"},{"id":13,"idx":13,"name":"14","start_position":0,"end_position":0,"start_position_original":339,"end_position_original":null,"berth_idx":"0"}]
+  var bitts =  [{"id":0,"idx":0,"name":"01","start_position":2850,"end_position":null,"start_position_original":0,"end_position_original":null,"berth_idx":"0"},{"id":1,"idx":1,"name":"02","start_position":2771.3999999999996,"end_position":null,"start_position_original":26.2,"end_position_original":null,"berth_idx":"0"},{"id":2,"idx":2,"name":"03","start_position":2693.3999999999996,"end_position":null,"start_position_original":52.2,"end_position_original":null,"berth_idx":"0"},{"id":3,"idx":3,"name":"04","start_position":2615.1000000000004,"end_position":null,"start_position_original":78.3,"end_position_original":null,"berth_idx":"0"},{"id":4,"idx":4,"name":"05","start_position":2536.8,"end_position":null,"start_position_original":104.4,"end_position_original":null,"berth_idx":"0"},{"id":5,"idx":5,"name":"06","start_position":2458.5,"end_position":null,"start_position_original":130.5,"end_position_original":null,"berth_idx":"0"},{"id":6,"idx":6,"name":"07","start_position":2380.5,"end_position":null,"start_position_original":156.5,"end_position_original":null,"berth_idx":"0"},{"id":7,"idx":7,"name":"08","start_position":2302.2,"end_position":null,"start_position_original":182.6,"end_position_original":null,"berth_idx":"0"},{"id":8,"idx":8,"name":"09","start_position":2223.8999999999996,"end_position":null,"start_position_original":208.7,"end_position_original":null,"berth_idx":"0"},{"id":9,"idx":9,"name":"10","start_position":2145.8999999999996,"end_position":null,"start_position_original":234.7,"end_position_original":null,"berth_idx":"0"},{"id":10,"idx":10,"name":"11","start_position":2067.6000000000004,"end_position":null,"start_position_original":260.8,"end_position_original":null,"berth_idx":"0"},{"id":11,"idx":11,"name":"12","start_position":1989.33,"end_position":null,"start_position_original":286.89,"end_position_original":null,"berth_idx":"0"},{"id":12,"idx":12,"name":"13","start_position":1911,"end_position":null,"start_position_original":313,"end_position_original":null,"berth_idx":"0"},{"id":13,"idx":13,"name":"14","start_position":1833,"end_position":null,"start_position_original":339,"end_position_original":null,"berth_idx":"0"},{"id":14,"idx":14,"name":"15","start_position":1755,"end_position":null,"start_position_original":365,"end_position_original":null,"berth_idx":"0"},{"id":0,"idx":0,"name":"15","start_position":1755,"end_position":null,"start_position_original":365,"end_position_original":null,"berth_idx":"1"},{"id":1,"idx":1,"name":"16","start_position":1689,"end_position":null,"start_position_original":387,"end_position_original":null,"berth_idx":"1"},{"id":2,"idx":2,"name":"17","start_position":1623.3000000000002,"end_position":null,"start_position_original":408.9,"end_position_original":null,"berth_idx":"1"},{"id":3,"idx":3,"name":"18","start_position":1557.3000000000002,"end_position":null,"start_position_original":430.9,"end_position_original":null,"berth_idx":"1"},{"id":4,"idx":4,"name":"19","start_position":1491.6,"end_position":null,"start_position_original":452.8,"end_position_original":null,"berth_idx":"1"},{"id":5,"idx":5,"name":"20","start_position":1425.9,"end_position":null,"start_position_original":474.7,"end_position_original":null,"berth_idx":"1"},{"id":6,"idx":6,"name":"21","start_position":1360.1999999999998,"end_position":null,"start_position_original":496.6,"end_position_original":null,"berth_idx":"1"},{"id":7,"idx":7,"name":"22","start_position":1294.1999999999998,"end_position":null,"start_position_original":518.6,"end_position_original":null,"berth_idx":"1"},{"id":8,"idx":8,"name":"23","start_position":1228.5,"end_position":null,"start_position_original":540.5,"end_position_original":null,"berth_idx":"1"},{"id":9,"idx":9,"name":"24","start_position":1162.8000000000002,"end_position":null,"start_position_original":562.4,"end_position_original":null,"berth_idx":"1"},{"id":10,"idx":10,"name":"25","start_position":1097.1000000000001,"end_position":null,"start_position_original":584.3,"end_position_original":null,"berth_idx":"1"},{"id":11,"idx":11,"name":"26","start_position":1031.1000000000001,"end_position":null,"start_position_original":606.3,"end_position_original":null,"berth_idx":"1"},{"id":12,"idx":12,"name":"27","start_position":965.3999999999999,"end_position":null,"start_position_original":628.2,"end_position_original":null,"berth_idx":"1"},{"id":0,"idx":0,"name":"28","start_position":900,"end_position":null,"start_position_original":650,"end_position_original":null,"berth_idx":"2"},{"id":1,"idx":1,"name":"29","start_position":830.3999999999999,"end_position":null,"start_position_original":673.2,"end_position_original":null,"berth_idx":"2"},{"id":2,"idx":2,"name":"30","start_position":761.1000000000001,"end_position":null,"start_position_original":696.3,"end_position_original":null,"berth_idx":"2"},{"id":3,"idx":3,"name":"31","start_position":692.1000000000001,"end_position":null,"start_position_original":719.3,"end_position_original":null,"berth_idx":"2"},{"id":4,"idx":4,"name":"32","start_position":622.8000000000001,"end_position":null,"start_position_original":742.4,"end_position_original":null,"berth_idx":"2"},{"id":5,"idx":5,"name":"33","start_position":553.5,"end_position":null,"start_position_original":765.5,"end_position_original":null,"berth_idx":"2"},{"id":6,"idx":6,"name":"34","start_position":484.19999999999993,"end_position":null,"start_position_original":788.6,"end_position_original":null,"berth_idx":"2"},{"id":7,"idx":7,"name":"35","start_position":415.19999999999993,"end_position":null,"start_position_original":811.6,"end_position_original":null,"berth_idx":"2"},{"id":8,"idx":8,"name":"36","start_position":345.89999999999986,"end_position":null,"start_position_original":834.7,"end_position_original":null,"berth_idx":"2"},{"id":9,"idx":9,"name":"37","start_position":276.60000000000014,"end_position":null,"start_position_original":857.8,"end_position_original":null,"berth_idx":"2"},{"id":10,"idx":10,"name":"38","start_position":207.30000000000007,"end_position":null,"start_position_original":880.9,"end_position_original":null,"berth_idx":"2"},{"id":11,"idx":11,"name":"39","start_position":138.30000000000007,"end_position":null,"start_position_original":903.9,"end_position_original":null,"berth_idx":"2"},{"id":12,"idx":12,"name":"40","start_position":69,"end_position":null,"start_position_original":927,"end_position_original":null,"berth_idx":"2"}]
   var vesselData = [{
     "id": "CAT00100012016",
     "berth_id": "0",
@@ -77,7 +78,7 @@ $(function(){
     "service_lane_color": "",
     "along_side": "0123S",
     "along_side_name": "S",
-    "head_position": 34,
+    "head_position": 100,
     "berth_dir_cd": "0042RL",
     "status": "P",
     "status_code": "0103P",
@@ -104,11 +105,37 @@ $(function(){
     vslData: vesselData
   }
 
-  var rightTools = $("#berth-right-tools").berthRightTools({
+  //init plugin
+  $("#berth-position-calc").berthPositionCalc({
+    berthPosition: '0119H',
+    data: {
+      mooringDistance: 20,
+      isClose: false,
+      bittData: bitts
+    },
+    onPositionCalculated: function (event, data){
+      console.log("data: ", data);
+    }
+  });
+
+  var berthPositionModal = $("#berth-position-calc").data('berthPositionCalc');
+  $("#berth-right-tools").berthRightTools({
     width: 350,
     height: 800,
     top: "5%",
     isTabWindow: true,
-    data: data
+    data: data,
+    onVslDblClick: function(event, data){
+      berthPositionModal.open(data);
+    },
   });
+
+  // $('#berth-right-tools').on('vslSelected', function (event, data){
+  //   console.log(data);
+  // });
+
+  // The instance is also saved in the DOM elements data,
+  // and accessible using the plugin's id 'berthRightTools'.
+  // rightTools = $('#berth-right-tools').data('berthRightTools');
+  // rightTools.close();
 })

@@ -7,6 +7,10 @@ const reStyle = /\.(css|less|styl|scss|sass|sss)$/;
 const reImage = /\.(bmp|gif|jpg|jpeg|png|svg)$/;
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const entry = {
+  'berth-right-tools': "./plugin/berth-right-tools/berth-right-tools.js",
+  'berth-position-calculation': "./plugin/berth-position-calculation/berth-position-calculation.js",
+}
 
 module.exports = env => {
   const isDebug = !(env.production || false);
@@ -22,9 +26,7 @@ module.exports = env => {
 
   return {
     context: path.join(__dirname, 'src'),
-    entry: {
-      'berth-right-tools': "./plugin/berth-right-tools/berth-right-tools.js",
-    },
+    entry: entry,
     output: {
       path: path.resolve(__dirname, 'build'),
       filename: isDebug ? '[name].js' : '[name].[chunkhash:16].min.js',
@@ -110,9 +112,10 @@ module.exports = env => {
     ],
     externals: {
       jquery: 'jQuery',
-      moment: 'moment'
+      moment: 'moment',
+      lodash: '_',
     },
-    cache: isDebug,
+    cache: false,
     stats: {
       colors: true
     },
