@@ -101,6 +101,10 @@ class Plugin {
 
   render() {
     this.$element.addClass(`modal ${PLUGIN_NAME}`);
+    this.$element.css({
+      'z-index': 9999
+    });
+
     this.$element.empty();
     let html = this.buildTemplate();
     this.$element.append(html);
@@ -121,6 +125,7 @@ class Plugin {
   }
 
   apply() {
+
     this.calculationBerthPosition();
   }
 
@@ -311,14 +316,14 @@ class Plugin {
     });
   }
 
-  processResult(result, isClose) {
+  processResult(result, isAutoClose) {
     this.$element.trigger('positionCalculated', $.extend(true, {}, result));
-    if (isClose) this.close();
+    if (isAutoClose) this.close();
   }
 
   calculationBerthPosition() {
 
-    let {vslData, bittData, mooringDistance, isClose} = this.pluginData;
+    let {vslData, bittData, mooringDistance, isAutoClose} = this.pluginData;
     let {along_side, berth_dir_cd, bridge_to_stern, LOA, berth_id} = vslData;
     let txtMeter = $(`#${LIST_CONTROLS.txtMeter}`);
     let txtBitt = $(`#${LIST_CONTROLS.txtBitt}`);
@@ -333,12 +338,13 @@ class Plugin {
       sternBitt: null,
       mBittHead: null,
       mBittStern: null,
-      error: null
+      error: null,
+      vslData: vslData,
     }
 
     if (!vslData || !bittData || mooringDistance == null) {
       result.error = ERROR_MSG.err01;
-      this.processResult(result, isClose);
+      this.processResult(result, isAutoClose);
       return;
     }
 
@@ -346,19 +352,19 @@ class Plugin {
       txtMeter.focus();
       txtBitt.val('');
       result.error = ERROR_MSG.err02;
-      this.processResult(result, isClose);
+      this.processResult(result, isAutoClose);
       return;
     }
 
     if (txtMeter.val().length == 0 && txtBitt.val().length == 0) {
       result.error = ERROR_MSG.err03;
-      this.processResult(result, isClose);
+      this.processResult(result, isAutoClose);
       return;
     }
 
     if (brthCd.length == 0) {
       result.error = ERROR_MSG.err03;
-      this.processResult(result, isClose);
+      this.processResult(result, isAutoClose);
       return;
     }
 
@@ -380,7 +386,7 @@ class Plugin {
 
     if (position == null) {
       result.error = ERROR_MSG.err03;
-      this.processResult(result, isClose);
+      this.processResult(result, isAutoClose);
       return;
     }
 
@@ -407,7 +413,8 @@ class Plugin {
     if(!result.headBitt || !result.sternBitt) {
       result.error = ERROR_MSG.err04;
       result.error.msg = `${result.error.msg} ${firstBitt.start_position_original} and ${lastBitt.start_position_original}.`;
-      this.processResult(result, isClose);
+      this.processResult(result, isAutoClose);
+      return;
     }
 
     let mooringPos = this.getMooringPos(result.headPos, result.sternPos, mooringDistance, berth_dir_cd, along_side);
@@ -416,8 +423,16 @@ class Plugin {
     if(!result.mBittHead || !result.mBittStern){
       result.error = ERROR_MSG.err05;
       result.error.msg = `${result.error.msg} ${firstBitt.name} and ${lastBitt.name}.`;
-      this.processResult(result, isClose);
+      this.processResult(result, isAutoClose);
+      return;
     }
+
+    //update vessel data
+    result.vslData.head_position = result.headPos;
+    result.vslData.mooring_head = result.mBittHead.id;
+    result.vslData.mooring_stern = result.mBittStern.id;
+    result.vslData.data_error = false;
+    result.vslData.is_change = true;
 
     // console.log("headPos: ", result.headPos);
     // console.log("sternPos: ", result.sternPos);
@@ -426,7 +441,8 @@ class Plugin {
     // console.log("sternBitt: ", result.sternBitt);
     // console.log("mBittHead: ", result.mBittHead);
     // console.log("mBittStern: ", result.mBittStern);
-    this.processResult(result, isClose);
+
+    this.processResult(result, isAutoClose);
   }
 
 

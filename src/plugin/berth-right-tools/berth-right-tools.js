@@ -1,6 +1,7 @@
 import './berth-right-tools.scss';
 import $ from 'jquery';
 import moment from 'moment';
+import lodash from 'lodash';
 import jqueryPlugin from '../../common/jquery-plugin';
 import {
   PLUGIN_NAME,
@@ -86,6 +87,7 @@ class Plugin {
         'width': width,
         'height': height,
         'top': top,
+        'z-index': 9999,
         'margin-right': isOpen ? 0 : (-width + RIGHT_BUTTON.width),
       });
 
@@ -135,7 +137,7 @@ class Plugin {
     this.buildTemplate();
   }
 
-  getVesselPosFromDate(previousDate, eta_date, etb_date, etd_date) {
+  getVesselPosFromDate(previousDate, etb_date, eta_date, etd_date) {
 
     let format = "DD/MM/YYYY hh:mm";
     let ETA_Date = moment(eta_date, format);
@@ -212,6 +214,7 @@ class Plugin {
           vvd: vslData[i].code,
           etb: moment(vslData[i].etb_date, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD HH:mm"),
           etd: moment(vslData[i].etd_date, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD HH:mm"),
+          vslId: vslData[i].id,
         })
       }
 
@@ -237,11 +240,11 @@ class Plugin {
         </thead>  
         <tbody>
         ${data.map(row => `
-            <tr>
+            <tr class="vessel-date" vsl-id="${row.vslId}">
               <td rowspan="2">${row.vvd}</td>
               <td>${row.etb}</td>
             </tr>
-            <tr>
+            <tr class="vessel-date" vsl-id="${row.vslId}">
               <td>${row.etd}</td>
             </tr>`).join('\n')
         }
@@ -322,6 +325,22 @@ class Plugin {
       }
     }
     return rs;
+  }
+
+  reLoadData(data) {
+    this.pluginData = $.extend(true, {}, data);
+    this.render();
+  }
+
+  removeVessel(vslId) {
+    $(`div.vessel-box[vsl-id='${vslId}']`).remove();
+    $(`tr.vessel-date[vsl-id='${vslId}']`).remove();
+    let {vslData} = this.pluginData;
+    if (vslData) {
+      lodash.remove(vslData, {
+        id: vslId
+      });
+    }
   }
 }
 

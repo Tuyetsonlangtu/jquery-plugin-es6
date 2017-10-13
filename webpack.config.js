@@ -17,7 +17,7 @@ module.exports = env => {
   console.log("isDebug : ", isDebug);
 
   const extractSass = new ExtractTextPlugin({
-    filename: isDebug ? "[name].css" : "[name].[chunkhash:16].min.css",
+    filename: isDebug ? "[name].css" : "[name].min.css",
   });
 
   const minimizeCssOptions = {
@@ -29,10 +29,10 @@ module.exports = env => {
     entry: entry,
     output: {
       path: path.resolve(__dirname, 'build'),
-      filename: isDebug ? '[name].js' : '[name].[chunkhash:16].min.js',
+      filename: isDebug ? '[name].js' : '[name].min.js',
       chunkFilename: isDebug
         ? '[name].chunk.js'
-        : '[name].[chunkhash:16].chunk.min.js',
+        : '[name].chunk.min.js',
     },
     resolve: {
       modules: ['node_modules', 'src'],

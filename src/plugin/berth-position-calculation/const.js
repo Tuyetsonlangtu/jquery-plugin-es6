@@ -19,7 +19,7 @@ export const VESSEL_DIR = {
 export const OPTIONS_DEFAULT = {
   berthPosition: BERTH_POSITION.head,
   onPositionCalculated: undefined,
-  isClose: false,
+  isAutoClose: false,
 }
 
 export const LIST_CONTROLS = {

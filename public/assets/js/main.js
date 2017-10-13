@@ -1,4 +1,6 @@
 var rightTools = null;
+var berthPositionModal = null;
+
 $(function(){
   var strDate = '2016-10-22', number = 9;
   var berthData = {
@@ -36,8 +38,8 @@ $(function(){
     "berth_dir_cd": "0042RL",
     "status": "P",
     "status_code": "0103P",
-    "eta_date": "22/10/2016 03:30",
-    "etb_date": "22/10/2016 00:00",
+    "eta_date": "22/10/2016 00:00",
+    "etb_date": "22/10/2016 03:30",
     "etd_date": "23/10/2016 16:00",
     "ata_date": "",
     "atb_date": "",
@@ -82,8 +84,8 @@ $(function(){
     "berth_dir_cd": "0042RL",
     "status": "P",
     "status_code": "0103P",
-    "eta_date": "24/10/2016 10:00",
-    "etb_date": "24/10/2016 00:00",
+    "eta_date": "24/10/2016 00:00",
+    "etb_date": "24/10/2016 10:00",
     "etd_date": "24/10/2016 17:00",
     "ata_date": "",
     "atb_date": "",
@@ -115,10 +117,17 @@ $(function(){
     },
     onPositionCalculated: function (event, data){
       console.log("data: ", data);
+      if(data.error){
+        console.log("error");
+        return;
+      }
+      let vslData = data.vslData;
+      rightTools.removeVessel(vslData.id);
+      berthPositionModal.close();
     }
   });
+  berthPositionModal = $("#berth-position-calc").data('berthPositionCalc');
 
-  var berthPositionModal = $("#berth-position-calc").data('berthPositionCalc');
   $("#berth-right-tools").berthRightTools({
     width: 350,
     height: 800,
@@ -129,13 +138,13 @@ $(function(){
       berthPositionModal.open(data);
     },
   });
-
+  // The instance is also saved in the DOM elements data,
+  // and accessible using the plugin's id 'berthRightTools'.
+  rightTools = $('#berth-right-tools').data('berthRightTools');
+  setTimeout(function(){
+    rightTools.reLoadData(data);
+  }, 1000);
   // $('#berth-right-tools').on('vslSelected', function (event, data){
   //   console.log(data);
   // });
-
-  // The instance is also saved in the DOM elements data,
-  // and accessible using the plugin's id 'berthRightTools'.
-  // rightTools = $('#berth-right-tools').data('berthRightTools');
-  // rightTools.close();
 })
