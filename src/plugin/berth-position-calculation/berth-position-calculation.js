@@ -115,7 +115,7 @@ class Plugin {
   }
 
   open(data){
-    this.pluginData.vslData = $.extend(true, {}, data);
+    this.pluginData = $.extend(true, {}, data);
     this.render();
     this.$modal.show();
   }
@@ -125,7 +125,6 @@ class Plugin {
   }
 
   apply() {
-
     this.calculationBerthPosition();
   }
 
@@ -238,72 +237,74 @@ class Plugin {
     }
   }
 
-  getMooringBittHead(mHeadPos, headPos, berthDir, vslDir, bitts) {
+  getMooringBittHead(mHeadPos, berthDir, vslDir, bitts) {
     let arrLength = bitts.length, bitt, index = 0;
     for (let i = 0; i < arrLength; i++) {
       let start = bitts[i].start_position_original;
       let end = i < arrLength - 1 ? bitts[i + 1].start_position_original : start;
       if (mHeadPos >= start && mHeadPos <= end) {
-        index = i;
         let midd = (end - start) / 2;
         if (midd >= (mHeadPos - start)) {
-          bitt = bitts[i];
+          index = i;
+          bitt = bitts[index];
           break;
         }
         else {
-          bitt = i < arrLength - 1 ? bitts[i + 1] : bitts[i];
+          index = i < arrLength - 1 ? i + 1 : i;
+          bitt = bitts[index];
           break;
         }
       }
     }
 
     if (bitt) {
-      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original < headPos)
+      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original < mHeadPos)
         bitt = index < arrLength - 1 ? bitts[index + 1] : bitts[index];
 
-      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original > headPos)
+      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original > mHeadPos)
         bitt = index > 0 ? bitts[index - 1] : bitts[index];
 
-      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original > headPos)
+      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original > mHeadPos)
         bitt = index > 0 ? bitts[index - 1] : bitts[index];
 
-      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original < headPos)
+      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original < mHeadPos)
         bitt = index < arrLength - 1 ? bitts[index + 1] : bitts[index];
     }
 
     return bitt;
   }
 
-  getMooringBittStern(mSternPos, sternPos, berthDir, vslDir, bitts){
+  getMooringBittStern(mSternPos, berthDir, vslDir, bitts){
     let arrLength = bitts.length, bitt, index = 0;
     for (let i = 0; i < arrLength; i++) {
       let start = bitts[i].start_position_original;
       let end = i < arrLength - 1 ? bitts[i + 1].start_position_original : start;
       if (mSternPos >= start && mSternPos <= end) {
-        index = i;
         let midd = (end - start) / 2;
         if (midd >= (mSternPos - start)) {
-          bitt = bitts[i];
+          index = i;
+          bitt = bitts[index];
           break;
         }
         else {
-          bitt = i < arrLength - 1 ? bitts[i + 1] : bitts[i];
+          index = i < arrLength - 1 ? i + 1 : i;
+          bitt = bitts[index];
           break;
         }
       }
     }
 
     if (bitt) {
-      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original < sternPos)
+      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original > mSternPos)
         bitt = index > 0 ? bitts[index - 1] : bitts[index];
 
-      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original > sternPos)
+      if (berthDir == BERTH_DIR.leftRight && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original < mSternPos)
         bitt = index < arrLength - 1 ? bitts[index + 1] : bitts[index];
 
-      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original > sternPos)
+      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.leftRight && bitt.start_position_original < mSternPos)
         bitt = index < arrLength - 1 ? bitts[index + 1] : bitts[index];
 
-      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original < sternPos)
+      if (berthDir == BERTH_DIR.rightLeft && vslDir == VESSEL_DIR.rightLeft && bitt.start_position_original > mSternPos)
         bitt = index > 0 ? bitts[index - 1] : bitts[index];
     }
 
@@ -321,9 +322,32 @@ class Plugin {
     if (isAutoClose) this.close();
   }
 
+  getBerthByHeadPos(headPos, berthArr) {
+    const length = berthArr.length;
+    let result = null;
+    for (let i = 0; i < length; i++) {
+      let left = berthArr[i].start_position_original;
+      let right = berthArr[i].end_position;
+      if (( left == 0 ? headPos >= left : headPos > left) && headPos <= right) {
+        result = berthArr[i];
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  getBerthById(berthArr, id) {
+    return lodash.find(berthArr, obj => {
+      return obj.id == id;
+    })
+  }
+
   calculationBerthPosition() {
 
-    let {vslData, bittData, mooringDistance, isAutoClose} = this.pluginData;
+    let {vslData, bittData, berthData, mooringDistance} = this.pluginData;
+    let {isAutoClose} = this.options;
+
     let {along_side, berth_dir_cd, bridge_to_stern, LOA, berth_id} = vslData;
     let txtMeter = $(`#${LIST_CONTROLS.txtMeter}`);
     let txtBitt = $(`#${LIST_CONTROLS.txtBitt}`);
@@ -338,12 +362,19 @@ class Plugin {
       sternBitt: null,
       mBittHead: null,
       mBittStern: null,
+      berth: null,
       error: null,
       vslData: vslData,
     }
 
-    if (!vslData || !bittData || mooringDistance == null) {
+    if (!vslData || !bittData || (!berthData || (!berthData[BERTH_DIR.rightLeft] && !berthData[BERTH_DIR.leftRight])) || mooringDistance == null) {
       result.error = ERROR_MSG.err01;
+      this.processResult(result, isAutoClose);
+      return;
+    }
+
+    if(berthData[BERTH_DIR.rightLeft] && berthData[BERTH_DIR.leftRight]) {
+      result.error = ERROR_MSG.err06;
       this.processResult(result, isAutoClose);
       return;
     }
@@ -368,10 +399,24 @@ class Plugin {
       return;
     }
 
-    let bitts = lodash.filter(bittData, obj => {
-      return obj.berth_idx == berth_id;
-    });
-    bitts = lodash.orderBy(bitts, ['start_position_original'], ['asc']);
+    let berthDataArr = [];
+    let berthDir = null;
+    let berthTotalWidth = 0;
+    berthTotalWidth = berthData.berth_total_width;
+    if(berthData[BERTH_DIR.leftRight]){
+      berthDataArr = berthData[BERTH_DIR.leftRight];
+      berthDir = BERTH_DIR.leftRight;
+    } else {
+      berthDataArr = berthData[BERTH_DIR.rightLeft];
+      berthDir = BERTH_DIR.rightLeft;
+    }
+    berthDataArr = lodash.orderBy(berthDataArr, ['start_position_original'], ['asc']);
+    // let bitts = lodash.filter(bittData, obj => {
+    //   return obj.berth_idx == berth_id;
+    // });
+
+    let bitts = lodash.orderBy(bittData, ['start_position_original'], ['asc']);
+    console.log("bitts: ", bitts);
     let firstBitt = bitts[0];
     let lastBitt = bitts[bitts.length - 1];
 
@@ -408,39 +453,62 @@ class Plugin {
         break;
     }
 
+    result.berth = this.getBerthByHeadPos(result.headPos, berthDataArr);
+    if(!result.berth) {
+      result.error = ERROR_MSG.err03;
+      this.processResult(result, isAutoClose);
+      return;
+    }
+
     result.headBitt = this.getBittByPos(result.headPos, bitts);
     result.sternBitt = this.getBittByPos(result.sternPos, bitts);
     if(!result.headBitt || !result.sternBitt) {
-      result.error = ERROR_MSG.err04;
+      result.error = {
+        code: ERROR_MSG.err04.code,
+        msg: ERROR_MSG.err04.msg,
+      }
       result.error.msg = `${result.error.msg} ${firstBitt.start_position_original} and ${lastBitt.start_position_original}.`;
       this.processResult(result, isAutoClose);
       return;
     }
 
     let mooringPos = this.getMooringPos(result.headPos, result.sternPos, mooringDistance, berth_dir_cd, along_side);
-    result.mBittHead = this.getMooringBittHead(mooringPos.mHead, result.headPos, berth_dir_cd, along_side, bitts);
-    result.mBittStern = this.getMooringBittStern(mooringPos.mStern, result.sternPos, berth_dir_cd, along_side, bitts);
+    result.mBittHead = this.getMooringBittHead(mooringPos.mHead, berth_dir_cd, along_side, bitts);
+    result.mBittStern = this.getMooringBittStern(mooringPos.mStern, berth_dir_cd, along_side, bitts);
     if(!result.mBittHead || !result.mBittStern){
-      result.error = ERROR_MSG.err05;
+      result.error = {
+        code: ERROR_MSG.err05.code,
+        msg: ERROR_MSG.err05.msg,
+      }
       result.error.msg = `${result.error.msg} ${firstBitt.name} and ${lastBitt.name}.`;
       this.processResult(result, isAutoClose);
       return;
     }
 
+    let berthHead = this.getBerthById(berthDataArr, result.mBittHead.berth_idx);
+    let berthStern = this.getBerthById(berthDataArr, result.mBittStern.berth_idx);
+    if(berthHead.group != berthStern.group) {
+      result.error = ERROR_MSG.err07;
+      this.processResult(result, isAutoClose);
+      return;
+    }
+
     //update vessel data
+    result.vslData.berth_id = result.berth.id;
     result.vslData.head_position = result.headPos;
     result.vslData.mooring_head = result.mBittHead.id;
     result.vslData.mooring_stern = result.mBittStern.id;
     result.vslData.data_error = false;
     result.vslData.is_change = true;
 
-    // console.log("headPos: ", result.headPos);
-    // console.log("sternPos: ", result.sternPos);
-    // console.log("bridgePos: ", result.bridgePos);
-    // console.log("headBitt: ", result.headBitt);
-    // console.log("sternBitt: ", result.sternBitt);
-    // console.log("mBittHead: ", result.mBittHead);
-    // console.log("mBittStern: ", result.mBittStern);
+    console.log("berth: ", result.berth);
+    console.log("headPos: ", result.headPos);
+    console.log("sternPos: ", result.sternPos);
+    console.log("bridgePos: ", result.bridgePos);
+    console.log("headBitt: ", result.headBitt);
+    console.log("sternBitt: ", result.sternBitt);
+    console.log("mBittHead: ", result.mBittHead);
+    console.log("mBittStern: ", result.mBittStern);
 
     this.processResult(result, isAutoClose);
   }

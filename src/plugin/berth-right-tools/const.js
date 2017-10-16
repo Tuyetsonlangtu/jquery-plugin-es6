@@ -13,6 +13,7 @@ export const OPTIONS_DEFAULT = {
   onVslSelected: undefined,
   isVslDblClick: true,
   onVslDblClick: undefined,
+  onMouseRightClick: undefined,
 }
 
 export const RIGHT_BUTTON = {

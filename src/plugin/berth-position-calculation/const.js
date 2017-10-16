@@ -38,5 +38,7 @@ export const ERROR_MSG = {
   err02: {code: 2, msg: 'Only one data must be filled between meter and bitt.'},
   err03: {code: 3, msg: 'Please select Berth Position.'},
   err04: {code: 4, msg: 'Berth Meter (Head) must be between'},
-  err05: {code: 6, msg: 'Mooring Bitt must be between'}
+  err05: {code: 5, msg: 'Mooring Bitt must be between'},
+  err06: {code: 6, msg: `don't support different berth directions`},
+  err07: {code: 7, msg: `can't assign vessel different berth group`},
 }

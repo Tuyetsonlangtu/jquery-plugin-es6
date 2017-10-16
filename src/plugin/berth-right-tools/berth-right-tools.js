@@ -60,6 +60,7 @@ class Plugin {
   }
 
   unsubscribeEvents(){
+    this.$element.unbind('contextmenu');
     this.$element.off('click');
     this.$element.off('vslSelected');
     this.$element.off('vslDblClick');
@@ -67,6 +68,7 @@ class Plugin {
 
   subscribeEvents() {
     this.unsubscribeEvents();
+    this.$element.bind('contextmenu', $.proxy(this.rightClickHandler, this));
     this.$element.on('click', $.proxy(this.clickHandler, this));
     this.$element.on('dblclick', $.proxy(this.dblClickHandler, this));
     if (typeof (this.options.onVslSelected) === 'function') {
@@ -74,6 +76,9 @@ class Plugin {
     }
     if (typeof (this.options.onVslDblClick) === 'function') {
       this.$element.on('vslDblClick', this.options.onVslDblClick);
+    }
+    if (typeof (this.options.onMouseRightClick) === 'function') {
+      this.$element.on('mouseRightClick', this.options.onMouseRightClick);
     }
   }
 
@@ -186,7 +191,7 @@ class Plugin {
     console.log("this.pluginData: ", this.pluginData);
     let {vslData, fromDate} = this.pluginData;
     const previousDate = moment(fromDate, 'YYYY-MM-DD');
-    if(vslData){
+    if(vslData && vslData.length > 0){
       let {vslBackColor, vslBorderColor} = this.options;
       let tblData = [];
       for(let i=0; i<vslData.length; i++){
@@ -212,7 +217,7 @@ class Plugin {
 
         tblData.push({
           vvd: vslData[i].code,
-          etb: moment(vslData[i].etb_date, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD HH:mm"),
+          etb: moment(vslData[i].eta_date, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD HH:mm"),
           etd: moment(vslData[i].etd_date, "DD/MM/YYYY hh:mm").format("YYYY-MM-DD HH:mm"),
           vslId: vslData[i].id,
         })
@@ -251,6 +256,7 @@ class Plugin {
         </tbody>
       </table>`
   }
+
 
   //Event
   clickHandler() {
@@ -304,6 +310,23 @@ class Plugin {
     }
   }
 
+  rightClickHandler() {
+    event.preventDefault();
+    let target = $(event.target);
+    let targetId = target.attr('id') ? target.attr('id') : "";
+    let vslId = target.attr('vsl-id');
+    let vslData = this.getVslDataById(vslId);
+    if (vslData) {
+      let {width} = this.options;
+      let $vslBox = $(`div.vessel-box[vsl-id='${vslId}']`);
+      this.$element.trigger('mouseRightClick', $.extend(true, {}, {
+        vslData: vslData,
+        top: $vslBox.offset().top + $vslBox.height(),
+        left: $vslBox.offset().left
+      }));
+    }
+  }
+
   closeRightTool() {
     let {width} = this.options;
     this.$RightTool.animate({'margin-right': (-width + RIGHT_BUTTON.width)});
@@ -327,7 +350,7 @@ class Plugin {
     return rs;
   }
 
-  reLoadData(data) {
+  loadData(data) {
     this.pluginData = $.extend(true, {}, data);
     this.render();
   }
