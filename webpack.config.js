@@ -10,6 +10,7 @@ const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const entry = {
   'berth-right-tools': "./plugin/berth-right-tools/berth-right-tools.js",
   'berth-position-calculation': "./plugin/berth-position-calculation/berth-position-calculation.js",
+  'message-box': './plugin/message-box/message-box.js',
 }
 
 module.exports = env => {

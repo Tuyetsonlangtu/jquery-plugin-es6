@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>isolution.tech | Message Box</title>
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
+    <link rel="stylesheet" href="../build/message-box.css">
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%;
+            margin: 0 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id='isolt-dlg'>
+        <div class="isolt-dlg-opacity"></div>
+        <div class='isolt-dlg-wrap msg-warning'>
+            <label id="isolt-dlg-close">
+                <i class="fa fa-times icon"></i>
+            </label>
+            <h2 class='isolt-dlg-header'>
+                Do you want to delete?
+            </h2>
+            <div class='isolt-dlg-content'>
+                You are about to kill a puppy, that's some serious shit. Have you really thought this through?You are about to kill a puppy ?
+            </div>
+            <div class='isolt-dlg-controls'>
+                <a href="javascript:;" class='isolt-btn positive'>
+                    <i class="icon ion-ios-checkmark-empty"></i> Yes, let's do it!
+                </a>
+                <a href="javascript:;" class='isolt-btn'>
+                    <i class="icon ion-ios-close-empty"></i> No, I'll reconsider
+                </a>
+            </div>
+        </div>
+    </div>
+</main>
+
+    <script src="assets/lib/jquery-1.9.1.js"></script>
+    <script src="assets/lib/jquery-migrate-1.1.0.js"></script>
+    <script src="../build/message-box.js"></script>
+</body>
+</html>
