@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>isolution.tech | Vessel Structure</title>
+  <link rel="stylesheet" href="assets/css/font-awesome.css">
+  <style>
+    html,body {
+      width: 100%;
+      height: 100%;
+      margin: 0 0;
+      overflow: hidden;
+      background: red;
+      background: #9E9E9E;
+    }
+    .container{
+      width: 90%;
+      height: 100%;
+      background: white;
+      float: right;
+      position: relative;
+    }
+  </style>
+  <link rel="stylesheet" href="../build/vessel-structure.css">
+
+</head>
+<body>
+  <div class="container">
+    <div id="vessel-structure"></div>
+  </div>
+
+<script src="assets/lib/jquery-1.9.1.js"></script>
+<script src="assets/lib/jquery-migrate-1.1.0.js"></script>
+<script src="assets/lib/lodash.min.js"></script>
+<script src="../build/vessel-structure.js"></script>
+
+<script>
+  $(function(){
+    $("#vessel-structure").vesselStructure({
+      images: {
+        vslImgBody : 'assets/images/ship_body-r.gif',
+      },
+      data: {},
+    });
+
+
+  })
+</script>
+</body>
+</html>

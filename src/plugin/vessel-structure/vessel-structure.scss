@@ -1,0 +1,35 @@
+.vesselStructure{
+  display: flex;
+  flex-direction: column;
+  margin: 5px 5px;
+  position: relative;
+
+  #side-view{
+    width: 100%;
+    border: 2px solid gray;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    flex-basis: 50%;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+    position: relative;
+
+    #vsl-img{
+      border: 2px solid gray;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+  }
+
+  #partition-view{
+    width: 100%;
+    border: 2px solid gray;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    flex: 1;
+    position: relative;
+  }
+}

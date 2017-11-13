@@ -11,6 +11,7 @@ const entry = {
   'berth-right-tools': "./plugin/berth-right-tools/berth-right-tools.js",
   'berth-position-calculation': "./plugin/berth-position-calculation/berth-position-calculation.js",
   'message-box': './plugin/message-box/message-box.js',
+  'vessel-structure': './plugin/vessel-structure/vessel-structure.js'
 }
 
 module.exports = env => {
