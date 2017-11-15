@@ -36,11 +36,44 @@
 
 <script>
   $(function(){
-    $("#vessel-structure").vesselStructure({
-      images: {
-        vslImgBody : 'assets/images/ship_body-r.gif',
+
+    var shipCrane = [{
+        id: '001',
+        name: '01',
+        partitions: [
+          { id: '01', name: '01' },
+          { id: '02', name: '02' }
+        ]
       },
-      data: {},
+      {
+        id: '002',
+        mame: '02',
+        partitions: []
+      },
+      {
+        id: '003',
+        mame: '03',
+        partitions: []
+      },
+      {
+        id: '004',
+        mame: '04',
+        partitions: []
+      },
+      {
+        id: '005',
+        name: '05',
+        partitions: [
+          { id: '06', name: '06' },
+          { id: '07', name: '07' }
+        ]
+      },
+    ];
+
+    $("#vessel-structure").vesselStructure({
+      data: {
+        hatchs: shipCrane
+      },
     });
 
 
