@@ -83,32 +83,28 @@ class Plugin {
     this.sideView.append($vslContent);
   }
 
-  renderPartitionView(){
-    let {icons} = this.options;
+  createSlot(){
+    let totalSlot = 2;
+    let html = "";
+    for(let i=0; i<totalSlot; i++){
+      let style = `
+        flex-basis: ${100 / totalSlot}%;
+        border-right: ${(totalSlot > 1 && i != totalSlot - 1) ? "2px solid #00a700;" : "none"};
+      `;
+      html += `<div class="slot-col" style="${style}"></div>`;
+    }
 
-    let $vslContent = $(`<div class="partition-content"></div>`);
-    let $detail = $(`<div class="partition-detail"></div>`);
+    return html;
+  }
 
-    let $lable = $(`<div class="partition-label"></div>`);
-    let lblRowhtml = `
-      <div class="lbl-left"><span>Row</span></div>
-      <div class="lbl-center"></div>
-      <div class="lbl-right"><span>Deck</span></div>
-    `;
-    $lable.append(lblRowhtml);
-    $detail.append($lable);
-
-    let $grid = $(`<div class="partition-grid"></div>`);
+  createDeck(){
     let $leftCol = $(`<div class="left-col"></div>`);
-    let $rightCol = $(`<div class="right-col"></div>`);
-    $grid.append($leftCol);
-    $grid.append($rightCol);
-
-    //Build left col
-    let totalDeck = 4;
+    let totalDeck = 1;
     let rowHright = 100 / totalDeck;
 
     for(let i=0; i<totalDeck;i++) {
+      let slotHtml = this.createSlot();
+
       let $row = $(`<div class="grid-row"></div>`);
       $row.css({
         "height" : `${rowHright}%`
@@ -130,13 +126,19 @@ class Plugin {
           <i class="fa fa-minus-square-o" aria-hidden="true"></i>
         </a>
       </div>
-      <div class="partition-table" style="${tableStyle}"></div>
+      <div class="partition-table" style="${tableStyle}">
+        ${slotHtml}
+      </div>
     `;
       $row.append(colHtml);
       $leftCol.append($row);
     }
 
-    //Build right col
+    return $leftCol;
+  }
+
+  createRightTools(){
+    let $rightCol = $(`<div class="right-col"></div>`);
     let rightColHtml = `
       <a href="javascript:;" class="btn-deck-plus">
         <i class="fa fa-plus-square-o" aria-hidden="true"></i>
@@ -146,11 +148,31 @@ class Plugin {
         <i class="fa fa-minus-square-o" aria-hidden="true"></i>
       </a>
     `;
+
     $rightCol.append(rightColHtml);
+    return $rightCol;
+  }
+
+  renderPartitionView(){
+    let {icons} = this.options;
+
+    let $vslContent = $(`<div class="partition-content"></div>`);
+    let $detail = $(`<div class="partition-detail"></div>`);
+
+    let $lable = $(`<div class="partition-label"></div>`);
+    let lblRowhtml = `
+      <div class="lbl-left"><span>Row</span></div>
+      <div class="lbl-center"><span>01</span></div>
+      <div class="lbl-right"><span>Deck</span></div>
+    `;
+    $lable.append(lblRowhtml);
+    $detail.append($lable);
+
+    let $grid = $(`<div class="partition-grid"></div>`);
+    $grid.append(this.createDeck());
+    $grid.append(this.createRightTools());
     $detail.append($grid);
-
     $vslContent.append($detail);
-
     this.partitionView.append($vslContent);
   }
 
